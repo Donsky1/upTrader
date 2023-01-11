@@ -1,0 +1,24 @@
+{% load menu_extras %}
+<ul>
+    <a href="/"><li> Назад </li></a>
+    {% for item, child in menu_dict.items %}
+        <a href="{{ item.get_absolute_url }}"><li> {{ item.name }} </li></a>
+        {% if child %}
+            <ul>
+            {% for value in child %}
+                {# если элемент списка словарь вывести только ключ, как элемент списка #}
+                {% with value=value|get_key_from_dict%}
+                    <a href="{{ value.get_absolute_url }}"><li> {{ value.name }} </li></a>
+                {% endwith %}
+                    {% if value.items %}
+                        <ul>
+                          {% for sub_values in value|get_values_from_dict %}
+                              <a href="{{ sub_values.get_absolute_url }}"><li> {{ sub_values.name }} </li></a>
+                          {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
+</ul>

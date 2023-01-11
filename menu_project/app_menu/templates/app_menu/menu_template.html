@@ -1,0 +1,36 @@
+{% load menu_extras %}
+
+{% with menu=menu_dict.items%}
+<nav class="navbar navbar-expand bg-dark navbar-dark ">
+    <ul class="navbar-nav ">
+        <a class="navbar-brand" href="/">upTrader</a>
+        {% for item, child in menu %}
+            <li class="nav-item dropdown {% if item.id == parent_id %}show{% else %}noactive{% endif %}">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ item.get_absolute_url }}" role="button" aria-haspopup="true" aria-expanded="{% if item.id == parent_id %}true{% else %}false{% endif %}">{{ item.name }}</a>
+                {% if child %}
+                    <div class="dropdown-menu {% if item.id == parent_id %}show{% else %}{% endif %}">
+                        {% for value in child %}
+                            {% if value.items %}
+                                {% for key_menu, val in value.items %}
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ key_menu }}
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        {% for sub_val in val %}
+                                            <a class="dropdown-item {% if sub_val.id == active_menu_id %}active{% endif %}" href="{{ sub_val.get_absolute_url }}">{{ sub_val.name }}</a>
+                                        {% endfor %}
+                                        </div>
+                                {% endfor %}
+                            {% else %}
+                                <a class="dropdown-item {% if value.id == active_menu_id %}active{% endif %}" href="{{ value.get_absolute_url }}">{{ value.name }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endwith %}
+</nav>
+
+
